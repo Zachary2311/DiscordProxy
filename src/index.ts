@@ -110,7 +110,7 @@ const PROJECT_PATH = "https://github.com/xhayper/DiscordProxy";
   });
 
   app.get("/", async (_, reply) => {
-    reply.redirect(PROJECT_PATH);
+    return done()
   });
 
   app
