@@ -1,5 +1,5 @@
 {
-  "onlyRobloxServer": true,
+  "onlyRobloxServer": false,
   "placeIds": [],
   "apiKeys": []
 }
