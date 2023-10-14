@@ -110,7 +110,7 @@ const PROJECT_PATH = "https://github.com/xhayper/DiscordProxy";
   });
 
   app.get("/", async (_, reply) => {
-    return done()
+    reply.code(40).send({ error: "You are not fetching a correct endpoint!"});
   });
 
   app
