@@ -36,6 +36,7 @@ const PROJECT_PATH = "https://github.com/xhayper/DiscordProxy";
   const apiKeys = new Set(config.apiKeys);
 
   const app = fastify();
+  const serverBootTime = Date.now();
 
   app.register(fastifyCompress);
   app.register(fastifyHelmet, { global: true });
@@ -52,6 +53,40 @@ const PROJECT_PATH = "https://github.com/xhayper/DiscordProxy";
   app.register(fastifyRatelimit, {
     max: 100,
     timeWindow: "1 minute",
+  });
+
+  app.get("/health", async (_, reply) => {
+    const metrics = app.memoryUsage();
+
+    reply.send({
+      status: "ok",
+      version: pkg.version,
+      uptimeSeconds: (Date.now() - serverBootTime) / 1000,
+      metrics: {
+        eventLoopDelay: metrics.eventLoopDelay,
+        eventLoopUtilized: metrics.eventLoopUtilized,
+        heapUsedBytes: metrics.heapUsed,
+        rssBytes: metrics.rssBytes,
+      },
+      underPressure: app.isUnderPressure(),
+    });
+  });
+
+  app.get("/ready", async (_, reply) => {
+    const metrics = app.memoryUsage();
+
+    reply.send({
+      status: app.isUnderPressure() ? "degraded" : "ready",
+      version: pkg.version,
+      uptimeSeconds: (Date.now() - serverBootTime) / 1000,
+      metrics: {
+        eventLoopDelay: metrics.eventLoopDelay,
+        eventLoopUtilized: metrics.eventLoopUtilized,
+        heapUsedBytes: metrics.heapUsed,
+        rssBytes: metrics.rssBytes,
+      },
+      underPressure: app.isUnderPressure(),
+    });
   });
 
   app.register(fastifyProxy, {
