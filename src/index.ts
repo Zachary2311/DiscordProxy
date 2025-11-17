@@ -35,7 +35,19 @@ const PROJECT_PATH = "https://github.com/xhayper/DiscordProxy";
 
   const apiKeys = new Set(config.apiKeys);
 
-  const app = fastify();
+  const trustProxySetting = (() => {
+    const trustedProxyHops = process.env.TRUSTED_PROXY_HOPS;
+
+    if (!trustedProxyHops) return true;
+
+    const hopCount = Number.parseInt(trustedProxyHops, 10);
+
+    if (Number.isNaN(hopCount) || hopCount < 1) return true;
+
+    return hopCount;
+  })();
+
+  const app = fastify({ trustProxy: trustProxySetting });
 
   app.register(fastifyCompress);
   app.register(fastifyHelmet, { global: true });
