@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "build": "del-cli dist && tsc",
-    "start": "node ."
+    "start": "node .",
+    "test": "node --test -r ts-node/register tests/robloxGuard.test.ts"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
   "devDependencies": {
     "@types/node": "^20.5.7",
     "del-cli": "^5.1.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.2.2"
   },
   "packageManager": "pnpm@8.7.1"

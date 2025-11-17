@@ -1,5 +1,6 @@
 {
   "onlyRobloxServer": false,
   "placeIds": [],
-  "apiKeys": []
+  "apiKeys": [],
+  "trustedReverseProxies": []
 }
