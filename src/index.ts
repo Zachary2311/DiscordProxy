@@ -11,6 +11,7 @@ import fastifyHelmet from "@fastify/helmet";
 import { robloxRanges } from "./robloxRanges";
 import fs from "node:fs/promises";
 import fastify from "fastify";
+import net from "node:net";
 import path from "node:path";
 
 const LOCAL_IP = ["localhost", "::1", "127.0.0.1", "::ffff:"];
@@ -75,9 +76,9 @@ const PROJECT_PATH = "https://github.com/xhayper/DiscordProxy";
 
       if (!config.onlyRobloxServer) return done();
 
-      const ip = request.ip;
+      const originalIp = request.ip;
 
-      if (LOCAL_IP.includes(ip)) return done();
+      if (LOCAL_IP.includes(originalIp)) return done();
 
       if (config.placeIds.length > 0) {
         const headers = request.headers;
@@ -91,7 +92,29 @@ const PROJECT_PATH = "https://github.com/xhayper/DiscordProxy";
         }
       }
 
-      if (!robloxRanges.check(ip)) {
+      const normalizedIpInfo = (() => {
+        const ipVersion = net.isIP(originalIp);
+
+        if (ipVersion === 0) return null;
+
+        if (ipVersion === 6) {
+          const mappedMatch = originalIp.match(/^::ffff:(?:0:)?(.+)$/i);
+
+          if (mappedMatch && net.isIP(mappedMatch[1]) === 4) {
+            return { ip: mappedMatch[1], type: "ipv4" as const };
+          }
+
+          return { ip: originalIp, type: "ipv6" as const };
+        }
+
+        return { ip: originalIp, type: "ipv4" as const };
+      })();
+
+      if (
+        !normalizedIpInfo ||
+        LOCAL_IP.includes(normalizedIpInfo.ip) ||
+        !robloxRanges.check(normalizedIpInfo.ip, normalizedIpInfo.type)
+      ) {
         reply
           .code(403)
           .send({ error: "You are not allowed to use this proxy." });

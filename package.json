@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "build": "del-cli dist && tsc",
-    "start": "node ."
+    "start": "node .",
+    "test": "vitest run"
   },
   "repository": {
     "type": "git",
@@ -31,7 +32,8 @@
   "devDependencies": {
     "@types/node": "^20.5.7",
     "del-cli": "^5.1.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.4"
   },
   "packageManager": "pnpm@8.7.1"
 }
