@@ -9,6 +9,7 @@ import fastifyProxy from "@fastify/http-proxy";
 import fastifyHelmet from "@fastify/helmet";
 
 import { robloxRanges } from "./robloxRanges";
+import { normalizeConfig, RawConfig } from "./config";
 import fs from "node:fs/promises";
 import fastify from "fastify";
 import path from "node:path";
@@ -17,13 +18,11 @@ const LOCAL_IP = ["localhost", "::1", "127.0.0.1", "::ffff:"];
 const PROJECT_PATH = "https://github.com/xhayper/DiscordProxy";
 
 (async () => {
-  const config = JSON.parse(
-    await fs.readFile(path.join(__dirname, "../", "config.json"), "utf-8")
-  ) as {
-    onlyRobloxServer: boolean;
-    placeIds: string[];
-    apiKeys: string[];
-  };
+  const config = normalizeConfig(
+    JSON.parse(
+      await fs.readFile(path.join(__dirname, "../", "config.json"), "utf-8")
+    ) as RawConfig
+  );
   const pkg = JSON.parse(
     await fs.readFile(path.join(__dirname, "../", "package.json"), "utf-8")
   ) as {
@@ -81,9 +80,14 @@ const PROJECT_PATH = "https://github.com/xhayper/DiscordProxy";
 
       if (config.placeIds.length > 0) {
         const headers = request.headers;
-        const placeId = headers["roblox-id"];
+        const placeIdHeader = headers["roblox-id"];
+        const normalizedHeader = Array.isArray(placeIdHeader)
+          ? placeIdHeader[0]
+          : placeIdHeader;
+        const placeId =
+          normalizedHeader !== undefined ? String(normalizedHeader) : undefined;
 
-        if (!placeId || !config.placeIds.includes(placeId as string)) {
+        if (!placeId || !config.placeIds.includes(placeId)) {
           reply
             .code(403)
             .send({ error: "You are not allowed to use this proxy." });
