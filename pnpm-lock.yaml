@@ -112,7 +112,7 @@ packages:
   /@fastify/http-proxy@9.2.1:
     resolution: {integrity: sha512-SSxcdrDQQA2PYYBCK+2I+w83QEbMt1s5bsKEERiMG1jcraQulTW3t/Wkje+RWJNNblDhABnhdKXUTbDuA/EIXA==}
     dependencies:
-      '@fastify/reply-from': 9.4.0
+      '@fastify/reply-from': 9.6.0
       fastify-plugin: 4.5.1
       ws: 8.13.0
     transitivePeerDependencies:
@@ -128,11 +128,12 @@ packages:
       tiny-lru: 11.0.1
     dev: false
 
-  /@fastify/reply-from@9.4.0:
-    resolution: {integrity: sha512-A0rT2o2Y8Xe9+CpS/VCfpWMLyptwI7peljdtdsW3nlLwwMbDr3kxDry5aiIb43SCfI1nr3B5mMH48kerJAZ8YQ==}
+  /@fastify/reply-from@9.6.0:
+    resolution: {integrity: sha512-c1AqCq5+Wsc9iGpeRE5UpkzNJFn1HW1tCBgQw9h/EcaohqhYp2zoeXFM/MVFZvVKPph9eFkbWzLoQqMH4degfg==}
     dependencies:
       '@fastify/error': 3.3.0
       end-of-stream: 1.4.4
+      fast-content-type-parse: 1.1.0
       fast-querystring: 1.1.2
       fastify-plugin: 4.5.1
       pump: 3.0.0
@@ -461,6 +462,10 @@ packages:
 
   /fast-content-type-parse@1.0.0:
     resolution: {integrity: sha512-Xbc4XcysUXcsP5aHUU7Nq3OwvHq97C+WnbkeIefpeYLX+ryzFJlU6OStFJhs6Ol0LkUGpcK+wL0JwfM+FCU5IA==}
+    dev: false
+
+  /fast-content-type-parse@1.1.0:
+    resolution: {integrity: sha512-fBHHqSTFLVnR61C+gltJuE5GkVQMV0S2nqUO8TJ+5Z3qAKG8vAx4FKai1s5jq/inV1+sREynIWSuQ6HgoSXpDQ==}
     dev: false
 
   /fast-decode-uri-component@1.0.1:
